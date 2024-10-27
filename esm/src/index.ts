@@ -7,7 +7,7 @@
 
 import * as fs from 'fs';
 import {GaxiosOptions, GaxiosPromise, request, GaxiosError} from 'gaxios';
-import * as jws from 'jws';
+import * as jose from 'jose';
 import * as path from 'path';
 import {promisify} from 'util';
 
@@ -326,11 +326,16 @@ export class GoogleToken {
       },
       additionalClaims,
     );
-    const signedJWT = jws.sign({
-      header: {alg: 'RS256'},
-      payload,
-      secret: this.key,
-    });
+
+    if (!this.key) throw new Error('Missing key!');
+
+    const alg = 'RS256';
+    const privateKey = await jose.importPKCS8(this.key, alg);
+
+    const signedJWT = await new jose.SignJWT(payload)
+      .setProtectedHeader({alg})
+      .sign(privateKey);
+
     try {
       const r = await this.transporter.request<TokenData>({
         method: 'POST',
