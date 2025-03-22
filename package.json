@@ -1,6 +1,6 @@
 {
   "name": "gtoken",
-  "version": "7.1.0",
+  "version": "7.2.0",
   "description": "Node.js Google Authentication Service Account Tokens",
   "main": "./build/cjs/src/index.cjs",
   "type": "module",
@@ -8,7 +8,7 @@
   "engines": {
     "node": ">=18"
   },
-  "repository": "google/node-gtoken",
+  "repository": "colbywhite/node-gtoken",
   "scripts": {
     "lint": "gts check",
     "clean": "rm -rf build",
